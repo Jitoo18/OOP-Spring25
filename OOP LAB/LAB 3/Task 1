@@ -1,1 +1,82 @@
+#include <iostream>
 
+using namespace std;
+
+class Wallet
+{
+
+    string ownerName;
+    double totalBalance;
+    string transactionHistory[100];
+    int transactionCount;
+
+public:
+    Wallet(string name, double balance = 0)
+    {
+        ownerName = name;
+        totalBalance = balance;
+        transactionCount = 0;
+    }
+
+    void addMoney(double amount)
+    {
+        if (amount > 0)
+        {
+            totalBalance += amount;
+            if (transactionCount < 100)
+            {
+                transactionHistory[transactionCount++] = "added: " + to_string((int)amount);
+            }
+            cout << "Amount added successfully and new balance is: " << totalBalance << endl;
+        }
+        else
+        {
+            cout << "Invalid amount please enter a positive value" << endl;
+        }
+    }
+
+    void spendMoney(double amount)
+    {
+        if (amount > 0 && amount <= totalBalance)
+        {
+            totalBalance -= amount;
+            if (transactionCount < 100)
+            {
+                transactionHistory[transactionCount++] = "spent: " + to_string((int)amount);
+            }
+            cout << "Transaction successful and remaining balance: " << totalBalance << endl;
+
+            if (totalBalance < 50)
+            {
+                cout << "Low balance reached, you have " << totalBalance << "left" << endl;
+            }
+        }
+        else
+        {
+            cout << "Insufficient funds" << endl;
+        }
+    }
+    void displayTransactionHistory()
+    {
+        cout << "\n Transaction history for" << ownerName << ":\n";
+
+        for (int i = 0; i < transactionCount; i++)
+        {
+            cout << transactionHistory[i] << endl;
+        }
+        cout << "Current balance: " << totalBalance << endl;
+    }
+};
+
+int main()
+{
+
+    Wallet saadWallet("saad", 100);
+
+    saadWallet.addMoney(1000);
+    saadWallet.spendMoney(250);
+    saadWallet.spendMoney(150);
+    saadWallet.displayTransactionHistory();
+
+    return 0;
+}
