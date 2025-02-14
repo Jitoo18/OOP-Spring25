@@ -1,0 +1,96 @@
+#include <iostream>
+using namespace std;
+
+class MusicPlayer
+{
+
+    string playlist[100];
+    int songCount;
+    string currentPlayingSong;
+
+public:
+    MusicPlayer()
+    {
+        songCount = 0;
+        currentPlayingSong = "";
+    }
+
+    void addSong(const string &song)
+    {
+        if (songCount < 100)
+        {
+            playlist[songCount] = song;
+            songCount++;
+            cout << "Added: " << song << "to the playlist\n";
+        }
+        else
+        {
+            cout << "Playlist is full";
+        }
+    }
+
+    void removeSong(const string &song)
+    {
+        for (int i = 0; i < songCount - 1; i++)
+        {
+            if (playlist[i] == song)
+            {
+                for (int j = 0; j < songCount - 1; j++)
+                {
+                    playlist[j] = playlist[j + 1];
+                }
+                songCount--;
+                cout << "REmoved: " << song << "from the playlist";
+                return;
+            }
+        }
+    }
+
+    void playSong(const string &song)
+    {
+        for (int i = 0; i < songCount; i++)
+        {
+            if (playlist[i] == song)
+            {
+                cout << "Now playing: " << song << endl;
+                return;
+            }
+        }
+        cout << "Song not foound!" << endl;
+    }
+
+    void displayplaylist() const
+    {
+        if (songCount == 0)
+        {
+            cout << "Playlist is empty";
+            return;
+        }
+
+        cout << "PlayList: \n";
+        for (int i = 0; i < songCount; i++)
+        {
+            cout << "# " << playlist[i] << endl;
+        }
+    }
+};
+
+int main()
+{
+
+    MusicPlayer MP;
+    MP.addSong("tere waaste falak se chaand laau ga");
+    MP.addSong("mere sapno ki raani kab aye gi tu");
+    MP.addSong("kuch na kaho kuch bhi naa kaho");
+
+    MP.displayplaylist();
+
+    MP.playSong("tere waaste falak se chaand laau ga");
+    MP.playSong("kuch na kaho kuch bhi naa kaho");
+
+    MP.removeSong("mere sapno ki raani kab aye gi tu");
+
+    MP.displayplaylist();
+
+    return 0;
+}
