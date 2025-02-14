@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+class FitnessTracker
+{
+    string userName;
+    int dailystepsGoal;
+    int stepsTaken;
+    float caloriesBurned;
+
+public:
+    FitnessTracker(string name, int goal)
+    {
+        userName = name;
+        dailystepsGoal = goal;
+        stepsTaken = 0;
+        caloriesBurned = 0;
+    }
+
+    void logSteps(int steps)
+    {
+        if (steps > 0)
+        {
+            stepsTaken += steps;
+            caloriesBurned += steps * 0.01;
+            cout << "Steps logged successfuly total steps are: " << stepsTaken << endl;
+        }
+        else
+        {
+            cout << "invalid step count enter a positive number" << endl;
+        }
+    }
+
+    void displayProgress()
+    {
+        cout << "\nFitness progress for " << userName << ":\n";
+        cout << "Daily step goal: " << dailystepsGoal << endl;
+        cout << "Steps taken: " << stepsTaken << endl;
+        cout << "Calories burned: " << caloriesBurned << endl;
+
+        if (stepsTaken >= dailystepsGoal)
+        {
+            cout << "Great job you met your daily step goal" << endl;
+        }
+        else
+        {
+            cout << "Keep going you need " << (dailystepsGoal - stepsTaken) << " more steps to reach your goal." << endl;
+        }
+    }
+};
+
+int main()
+{
+    FitnessTracker laiba("laiba", 10000);
+
+    laiba.logSteps(3000);
+    laiba.logSteps(1500);
+    laiba.displayProgress();
+
+    return 0;
+}
