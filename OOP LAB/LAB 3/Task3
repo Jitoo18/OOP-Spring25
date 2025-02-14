@@ -1,0 +1,114 @@
+#include <iostream>
+
+using namespace std;
+
+class Library
+{
+
+    string bookList[50];
+    bool isBorrowed[50];
+    int bookCount;
+
+public:
+    Library() : bookCount(0) {}
+
+    void addBook(string book)
+    {
+        if (bookCount < 50)
+        {
+            bookList[bookCount] = book;
+            isBorrowed[bookCount] = false;
+            bookCount++;
+            cout << "Book added:  " << book << endl;
+        }
+        else
+        {
+            cout << "Library has no more space for adding new books\n";
+        }
+    }
+
+    void lendBook(string book)
+    {
+        for (int i = 0; i < bookCount; i++)
+        {
+            if (bookList[i] == book && !isBorrowed[i])
+            {
+                isBorrowed[i] = true;
+                cout << "Book " << book << " has been borrowed\n";
+                return;
+            }
+        }
+        cout << "Book " << book << "is not available.";
+    }
+
+    void returnBook(string book)
+    {
+        for (int i = 0; i < bookCount; i++)
+        {
+            if (bookList[i] == book && isBorrowed[i])
+            {
+                isBorrowed[i] = false;
+                cout << "Book " << book << " has been returned";
+                return;
+            }
+        }
+        cout << "Book " << book << "was not borrowed from this library\n";
+    }
+    void displayAllBooks()
+    {
+        cout << "\nAvailable Books:\n";
+        bool found = false;
+        for (int i = 0; i < bookCount; i++)
+        {
+            if (!isBorrowed[i])
+            {
+                cout << "- " << bookList[i] << endl;
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            cout << "No books are currently available\n";
+        }
+    }
+
+    void displayBorrowedBooks()
+    {
+        cout << "\nBorrowed Books:\n";
+        bool found = false;
+        for (int i = 0; i < bookCount; i++)
+        {
+            if (isBorrowed[i])
+            {
+                cout << "- " << bookList[i] << endl;
+                found = true;
+            }
+        }
+        if (!found)
+        {
+            cout << "No books are currently borrowed";
+        }
+    }
+};
+
+int main()
+{
+    Library lib;
+
+    lib.addBook("CALCULUS 3");
+    lib.addBook("ENGLISH");
+    lib.addBook("OOP");
+
+    lib.displayAllBooks();
+
+    lib.lendBook("OOP");
+
+    lib.displayAllBooks();
+    lib.displayBorrowedBooks();
+
+    lib.returnBook("OOP");
+    lib.displayAllBooks();
+    lib.displayBorrowedBooks();
+
+    return 0;
+}
