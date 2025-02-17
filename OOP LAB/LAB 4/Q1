@@ -1,1 +1,83 @@
+#include<iostream>
+#include<string>
 
+using namespace std;
+
+class Car {
+
+		string brand;
+		string model;
+		double rentalPrice;
+		bool isAvailable;
+
+	public:
+
+		Car() {
+			brand = "unknown";
+			model = "generic";
+			rentalPrice = 0.0;
+			isAvailable = true;
+		}
+
+		void update(const string& b, const string& m, double p ) {
+			brand = b;
+			model = m;
+			rentalPrice = p;
+		}
+
+		bool avaialbility() {
+			return isAvailable;
+		}
+
+		void rentCar() {
+			if(isAvailable) {
+				isAvailable = false;
+				cout<<"The car is available";
+			} else {
+				cout<<"The car is rented";
+
+			}
+		}
+
+		void returnCar() {
+			isAvailable = true;
+			cout<<"The Car is returned and is available";
+		}
+
+		void details() {
+			cout<<"\nCar details.";
+			cout<<"Brand: "<<brand<<endl;
+			cout<<"Model: "<<model<<endl;
+			cout<<"Rent Price: "<<rentalPrice<<endl;
+			cout<<"Availability:  "<<(isAvailable ? "available":"rented")<<endl;
+		}
+};
+
+int main() {
+	Car c;
+
+	c.details();
+
+	c.update("Audi", "A8", 5000);
+
+	cout<<"\n\nAfter updating details: \n";
+	c.details();
+	cout<<endl;
+
+
+	c.avaialbility();
+	cout<<endl;
+
+	c.rentCar();
+	cout<<endl;
+	c.rentCar();
+	cout<<endl;
+
+
+	c.returnCar();
+
+	cout<<endl;
+	c.avaialbility();
+
+	return 0;
+}
