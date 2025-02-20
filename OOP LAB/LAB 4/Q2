@@ -1,0 +1,100 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class Car {
+
+		string brand;
+		string model;
+		double rentalPrice;
+		bool isAvailable;
+
+	public:
+		// default constructor
+		Car() {
+			brand = "unknown";
+			model = "generic";
+			rentalPrice = 0.0;
+			isAvailable = true;
+		}
+		// parametric constructor
+		Car(string Brand, string Model, double price, bool availability) {
+			brand = Brand;
+			model = Model;
+			rentalPrice = price;
+			isAvailable = availability;
+		}
+
+		void update(const string& b, const string& m, double p ) {
+			brand = b;
+			model = m;
+			rentalPrice = p;
+		}
+
+		bool availability() const {
+			return isAvailable;
+		}
+
+		double applyDiscount (int days) {
+			double discount = 0;
+			if (days > 10) {
+				discount = 0.1;
+			} else if(days >=5 ) {
+				discount = 0.05;
+			}
+			return rentalPrice * days * (1- discount);
+		}
+
+		void rentCar(int days) {
+			if(isAvailable) {
+				isAvailable = false;
+				double finalPrice = applyDiscount(days);
+				cout<<"The car is available for: "<<days<<" days"<< endl;
+				cout<<"Total cost after discount = "<< finalPrice << endl;
+			} else {
+				cout<<"The car is rented\n";
+			}
+		}
+
+		void returnCar() {
+			isAvailable = true;
+			cout<<"The car is returned and available\n";
+		}
+
+		void details() {
+			cout<<"\nCar details.";
+			cout<<"Brand: "<<brand<<endl;
+			cout<<"Model: "<<model<<endl;
+			cout<<"Rent Price: "<<rentalPrice<<endl;
+			cout<<"Availability:  "<<(isAvailable ? "available":"rented")<<endl;
+		}
+};
+
+
+int main(){
+
+	Car a("Audi","A8",5000,true);
+	Car b("BMW","M4",6000,true);
+
+
+	a.details();
+	cout<<endl;
+	b.details();
+	cout<<endl;
+
+
+	a.rentCar(7);
+
+
+	a.rentCar(4);
+
+
+	a.returnCar();
+
+
+	a.rentCar(12);
+
+
+	return 0;
+}
