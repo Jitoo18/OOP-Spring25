@@ -64,7 +64,6 @@ int main() {
 	c.details();
 	cout<<endl;
 
-
 	c.avaialbility();
 	cout<<endl;
 
@@ -72,7 +71,6 @@ int main() {
 	cout<<endl;
 	c.rentCar();
 	cout<<endl;
-
 
 	c.returnCar();
 
