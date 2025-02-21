@@ -1,0 +1,100 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Car {
+		
+		string registrationNumber;
+		string brand;
+		string model;
+		double rentalPrice;
+		bool isAvailable;
+		double totalRevenue;
+		
+	public:
+		// default constructor
+		Car() : registrationNumber("Unknown"), brand("unknown"), model("generic"), rentalPrice(0.0), isAvailable(true), totalRevenue(0.0) {}
+		
+		// parametric constructor
+		Car(const string &reg, const string &Brand, const string &Model, double price, bool availability): registrationNumber(reg), brand(Brand), model(Model), rentalPrice(price), isAvailable(availability), totalRevenue(0.0) {}
+
+		//copy constructor
+		Car(const Car &other) : registrationNumber(other.registrationNumber), brand(other.brand), model(other.model), rentalPrice(other.rentalPrice), isAvailable(other.isAvailable), totalRevenue(other.totalRevenue) {}
+
+		//destructor
+		~Car()
+		{
+	
+		}
+
+		void update(const string& b, const string& m, double p ) {
+			brand = b;
+			model = m;
+			rentalPrice = p;
+		}
+
+		bool availability() const {
+			return isAvailable;
+		}
+
+		double applyDiscount (int days) {
+			double discount = 0;
+			if (days > 10) {
+				discount = 0.1;
+			} else if(days >=5 ) {
+				discount = 0.05;
+			}
+			return rentalPrice * days * (1- discount);
+		}
+
+		void rentCar(int days) {
+			if(isAvailable) {
+				isAvailable = false;
+				double finalPrice = applyDiscount(days);
+				
+				this->totalRevenue += finalPrice;
+			
+				cout<<"The car with registration number "<<registrationNumber<<"has been rented for: "<< days <<" days"<< endl;
+				cout<<"Total cost after discount = "<< finalPrice << endl;
+			} else {
+				cout<<"The car with registration number "<<registrationNumber<<" is rented."<< endl;
+			}
+		}
+
+		void returnCar() {
+			isAvailable = true;
+			cout<<"\nThe car with registration number "<<registrationNumber<<" is retruned."<< endl;
+		}
+
+		void details() const {
+			cout<<"\nCar details.";
+			cout<<"Registration number: "<< registrationNumber <<endl;
+			cout<<"Brand: "<<brand<<endl;
+			cout<<"Model: "<<model<<endl;
+			cout<<"Rent Price: "<<rentalPrice<<endl;
+			cout<<"Availability:  "<<(isAvailable ? "available":"rented")<<endl;
+			cout<<"Total revenue: "<<totalRevenue<<endl;
+		}
+		
+		void displayRevenue() const {
+			cout<<"\nTotal revenue for "<<brand<<" "<<model<<": "<<this->totalRevenue<<endl;
+		}
+};
+
+int main() {
+	Car c1("ABC123","Audi","A8",5000,true);
+	
+	c1.details();
+	
+	c1.rentCar(7);
+	c1.details();
+	
+	c1.rentCar(10);
+	
+	c1.returnCar();
+	
+	c1.rentCar(15);
+	c1.details();
+	
+	return 0;
+}
