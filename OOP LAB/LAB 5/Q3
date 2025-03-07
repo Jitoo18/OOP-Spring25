@@ -1,0 +1,92 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int MAX_PROJECTS = 5;
+const int MAX_EMPLOYEES = 5;
+
+class Employee {
+    char name[50];
+    char designation[30];
+
+public:
+    Employee(const char* empName, const char* empDesignation) {
+        strcpy(name, empName);
+        strcpy(designation, empDesignation);
+    }
+
+    const char* getName() const {
+        return name;
+    }
+
+    const char* getDesignation() const {
+        return designation;
+    }
+
+    void displayEmployeeDetails() const {
+        cout << "Employee: " << name << "\nDesignation: " << designation << endl;
+        cout << "-----------------------------------------------" << endl;
+    }
+};
+
+class Project {
+    char title[50];
+    char deadline[20];
+    Employee* assignedEmployees[MAX_EMPLOYEES];
+    int employeeCount;
+
+public:
+    Project(const char* pTitle, const char* pDeadline) {
+        strcpy(title, pTitle);
+        strcpy(deadline, pDeadline);
+        employeeCount = 0;
+    }
+
+    void addEmployee(Employee* emp) {
+        if (employeeCount < MAX_EMPLOYEES) {
+            assignedEmployees[employeeCount++] = emp;
+        } else {
+            cout << "Cannot assign more employees to project " << title << endl;
+        }
+    }
+
+    void displayProjectDetails() const {
+        cout << "Project: " << title << "\nDeadline: " << deadline << endl;
+        cout << "Assigned Employees: ";
+        if (employeeCount == 0) {
+            cout << "None\n";
+        } else {
+            for (int i = 0; i < employeeCount; i++) {
+                cout << assignedEmployees[i]->getName() << " (" << assignedEmployees[i]->getDesignation() << "), ";
+            }
+            cout << endl;
+        }
+        cout << "-------------------------------------------------------" << endl;
+    }
+};
+
+int main() {
+    Employee e1("Jitesh", "Software Engineer");
+    Employee e2("Prem", "Project Manager");
+    Employee e3("Alok", "QA Engineer");
+
+    Project p1("AI Chatbot", "March 30, 2025");
+    Project p2("E-commerce Website", "April 20, 2025");
+
+    p1.addEmployee(&e1);
+    p1.addEmployee(&e2);
+    p2.addEmployee(&e2);
+    p2.addEmployee(&e3);
+
+    cout << "======= PROJECT DETAILS ========" << endl;
+    p1.displayProjectDetails();
+    p2.displayProjectDetails();
+
+    cout << "======= EMPLOYEE DETAILS ========" << endl;
+    e1.displayEmployeeDetails();
+    e2.displayEmployeeDetails();
+    e3.displayEmployeeDetails();
+
+    return 0;
+}
