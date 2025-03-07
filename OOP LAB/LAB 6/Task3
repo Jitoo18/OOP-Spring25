@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+using namespace std;
+class Person
+{
+protected:
+    string name;
+    int age;
+
+public:
+    Person(string n, int a) : name(n), age(a) {}
+    void display()
+    {
+        cout << "==========DETAILS========="<<endl<<endl;
+        cout << "Name: " << name << endl;
+        cout << "Age: " << age << endl;
+    }
+};
+class Teacher : public Person
+{
+protected:
+    string subject;
+
+public:
+    Teacher(string n, int a, string s) : Person(n, a), subject(s) {}
+    void display()
+    {
+        Person::display();
+        cout << "Subject of Teaching: " << subject<<endl;
+    }
+};
+class Researcher : public Person
+{
+protected:
+    string researchArea;
+
+public:
+    Researcher(string n, int a, string r) : Person(n, a), researchArea(r) {}
+    void display()
+    {
+
+        cout << "Research Area: " << researchArea;
+    }
+};
+class Professor : public Teacher, public Researcher
+{
+protected:
+    int publication;
+
+public:
+    Professor(string n, int a, string s, string r, int p) : Teacher(n, a, s), Researcher(n, a, r), publication(p) {}
+    void display()
+    {
+        Teacher::display();
+        Researcher::display();
+        cout << "\nNumber Of Publications: " << publication << endl;
+    }
+};
+
+int main()
+{
+    Professor p1("Jitesh", 18, "MVC", "Machine Learning", 4);
+    p1.display();
+}
