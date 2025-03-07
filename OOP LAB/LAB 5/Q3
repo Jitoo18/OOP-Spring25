@@ -11,20 +11,20 @@ class Employee {
     char designation[30];
 
 public:
-    Employee(const char* empName, const char* empDesignation) {
+    Employee(char* empName, char* empDesignation) {
         strcpy(name, empName);
         strcpy(designation, empDesignation);
     }
 
-    const char* getName() const {
+    char* getName() {
         return name;
     }
 
-    const char* getDesignation() const {
+    char* getDesignation() {
         return designation;
     }
 
-    void displayEmployeeDetails() const {
+    void displayEmployeeDetails() {
         cout << "Employee: " << name << "\nDesignation: " << designation << endl;
         cout << "-----------------------------------------------" << endl;
     }
@@ -37,7 +37,7 @@ class Project {
     int employeeCount;
 
 public:
-    Project(const char* pTitle, const char* pDeadline) {
+    Project(char* pTitle, char* pDeadline) {
         strcpy(title, pTitle);
         strcpy(deadline, pDeadline);
         employeeCount = 0;
@@ -51,7 +51,7 @@ public:
         }
     }
 
-    void displayProjectDetails() const {
+    void displayProjectDetails() {
         cout << "Project: " << title << "\nDeadline: " << deadline << endl;
         cout << "Assigned Employees: ";
         if (employeeCount == 0) {
