@@ -14,16 +14,15 @@ class Apartment{
 			address = aptAddress;
 			ownerName = new char[strlen(owner)+1];
 			strcpy(ownerName, owner);
-			
 		}
 		
-		Apartment(const Apartment& other){
+		Apartment(Apartment& other){
 			id = other.id;
 			address = other.address;
 			ownerName = other.ownerName;
 		}
 		
-		void display() const {
+		void display() {
 			cout<<"Apartment ID: "<< id << endl;
 			cout<<"Address: "<< address << endl;
 			cout<<"Owner: "<< ownerName << endl;
@@ -32,14 +31,11 @@ class Apartment{
 		
 		~Apartment(){
 			delete[] ownerName;
-			
 		}
 };
 
 int main(){
-	
 	Apartment apt1(334,"sunset lane 136","Jitesh");
-	
 	Apartment apt2 = apt1;
 	
 	cout<<"Original Apartment: "<< endl;
