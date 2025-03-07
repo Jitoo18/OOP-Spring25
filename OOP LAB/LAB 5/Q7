@@ -1,0 +1,81 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class Product {
+	public:
+		int id;
+		char name[50];
+		int quantity;
+
+		Product() {}
+
+		Product(int pid, const char* pname, int qty) {
+			id = pid;
+			strcpy(name, pname);
+			quantity = qty;
+		}
+
+		void display() const {
+			cout << "ID: " << id << " | Name: " << name << " | Stock: " << quantity << endl;
+		}
+};
+
+void sortInventory(Product products[], int size) {
+	for (int i = 0; i < size - 1; i++) {
+		for (int j = 0; j < size - i - 1; j++) {
+			if (strcmp(products[j].name, products[j + 1].name) > 0) {
+				swap(products[j], products[j + 1]);
+			}
+		}
+	}
+}
+
+void searchProduct(Product products[], int size, int searchID) {
+	for (int i = 0; i < size; i++) {
+		if (products[i].id == searchID) {
+			cout << "\nProduct Found!\n";
+			products[i].display();
+			return;
+		}
+	}
+	cout << "\nProduct with ID " << searchID << " not found.\n";
+}
+
+int main() {
+	int numProducts;
+	cout << "Enter number of products: ";
+	cin >> numProducts;
+
+	Product inventory[numProducts];
+
+	for (int i = 0; i < numProducts; i++) {
+		int id, qty;
+		char name[50];
+
+		cout << "\nEnter details for product " << i + 1 << ":\n";
+		cout << "ID: ";
+		cin >> id;
+		cin.ignore();
+		cout << "Name: ";
+		cin.getline(name, 50);
+		cout << "Quantity: ";
+		cin >> qty;
+
+		inventory[i] = Product(id, name, qty);
+	}
+
+	sortInventory(inventory, numProducts);
+
+	cout << "\nSorted Inventory (Alphabetically by Name):\n";
+	for (int i = 0; i < numProducts; i++) {
+		inventory[i].display();
+	}
+
+	int searchID;
+	cout << "\nEnter Product ID to search: ";
+	cin >> searchID;
+	searchProduct(inventory, numProducts, searchID);
+
+	return 0;
+}
