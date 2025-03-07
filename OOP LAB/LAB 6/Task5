@@ -1,0 +1,82 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Device
+{
+protected:
+    int deviceID;
+    bool status;
+
+public:
+    Device(int id, bool s) : deviceID(id), status(s) {}
+    void display()
+    {
+        cout << "Device ID: " << deviceID << endl;
+        cout << "status: " << (status ? "ON" : "OFF") << endl;
+    }
+};
+
+class SmartPhone : public Device
+{
+protected:
+    float screenSize;
+
+public:
+    SmartPhone(int id, bool s, float ss) : Device(id, s), screenSize(ss) {}
+    void display()
+    {
+        Device::display();
+        cout << "Screen Size: " << screenSize << endl;
+    }
+};
+class SmartWatch : public SmartPhone
+{
+protected:
+    bool heartRateMonitor;
+
+public:
+    SmartWatch(int id, bool s, float ss, bool h) : SmartPhone(id, s, ss), heartRateMonitor(h) {}
+    void display()
+    {
+        SmartPhone::display();
+        cout << "heartRateMonitor :" << (heartRateMonitor ? "YES" : "NO") << endl;
+    }
+};
+class SmartWearable : public SmartWatch
+{
+protected:
+    int stepCounter;
+
+public:
+    SmartWearable(int id, bool s, float ss, bool h, int sc) : SmartWatch(id, s, ss, h), stepCounter(sc) {}
+    void display()
+    {
+        cout << "Showing Details:" << endl;
+        SmartWatch::display();
+        cout << "Step Counter: " << stepCounter << endl;
+    }
+};
+int main()
+{
+    int id, step;
+    bool status, hrm;
+    float size;
+    
+    cout << "Enter Smart Wearable Specifications: " << endl;
+    cout << "Device ID: ";
+    cin >> id;
+    cout << "Status (1 for ON, 0 for OFF): ";
+    cin >> status;
+    cout << "Screen Size (in inches): ";
+    cin >> size;
+    cout << "Heart Rate Monitor (1 for Yes, 0 for No): ";
+    cin >> hrm;
+    cout << "Step Counter: ";
+    cin >> step;
+    
+    
+    SmartWearable s1(id, status, size, hrm, step);
+    s1.display();
+}
