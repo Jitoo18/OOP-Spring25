@@ -1,0 +1,52 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+class AlarmSystem {
+	char securityLevel[10];
+	
+	public:
+		AlarmSystem(const char* level){
+			strcpy(securityLevel, level);
+		}
+	
+		void displayAlarmInfo() const {
+			cout<<"Alarm security level: "<< securityLevel<< endl;
+		}
+		
+};
+
+class SmartHome{
+	char ownerName[50];
+	int homeID;
+	AlarmSystem alarm;
+	
+	public:
+		SmartHome(const char* owner, int id, const char* sLevel): alarm(sLevel) {
+			strcpy(ownerName, owner);
+			homeID = id;
+		}
+		
+		void display() const {
+			cout<<"Smart Home ID: "<< homeID << endl;
+			cout<<"Owner: "<<ownerName << endl;
+			alarm.displayAlarmInfo();
+			cout<<"-----------------------------------"<<endl;
+		} 
+		
+};
+
+int main(){
+	
+	SmartHome h1("Jitesh",001,"High");
+	SmartHome h2("Alok",002,"Meidum");
+	
+	
+	cout<<"======SMART HOME DETAILS ========"<< endl;
+	h1.display();
+	h2.display();
+	
+	return 0;
+	
+}
