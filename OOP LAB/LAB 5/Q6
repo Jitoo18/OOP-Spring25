@@ -1,0 +1,48 @@
+#include<iostream>
+using namespace std;
+
+class level{
+    private:
+    string lName;
+    string detail;
+    public:
+    level(){
+
+    }
+    level(string n,string de){
+        lName = n;
+        detail = de;
+    }
+    void display(){
+        cout << "\nLevel is: " << lName << endl;
+        cout << "Detail of level: " << detail << endl;
+    }
+};
+
+class game{
+    private:
+    string name;
+    level Levels[10];
+    public:
+    int countLevel = 0;
+    game(string n){
+        name = n;
+    }
+    void addlevel(level l){
+        Levels[countLevel++] = l;
+    }
+    void displayGane(){
+        cout << "Game Name: " << name;
+        for(int i=0;i<countLevel;i++){
+            Levels[i].display();
+        }
+    }
+};
+
+int main(){
+    level l1("LEVEL 13","MEDIUM");
+    game g1("RC 24");
+    g1.addlevel(l1);
+    g1.displayGane();
+    return 0;
+}
