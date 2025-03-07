@@ -1,0 +1,83 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+const int MAX_DOCTORS = 10;
+
+class Doctor {
+private:
+    char name[50];
+    char specialization[50];
+    int experience;
+
+public:
+    Doctor(char* docName, char* docSpecialization, int exp) {
+        strcpy(name, docName);
+        strcpy(specialization, docSpecialization);
+        experience = exp;
+    }
+
+    void displayDoctor() {
+        cout << "Dr. " << name << " (" << specialization << ", " << experience << " years experience)" << endl;
+    }
+
+    char* getName() {
+        return name;
+    }
+};
+
+class Hospital {
+private:
+    char hospitalName[50];
+    Doctor* doctors[MAX_DOCTORS];
+    int doctorCount;
+
+public:
+    Hospital(char* hospName) {
+        strcpy(hospitalName, hospName);
+        doctorCount = 0;
+    }
+
+    void addDoctor(Doctor* doc) {
+        if (doctorCount < MAX_DOCTORS) {
+            doctors[doctorCount++] = doc;
+        } else {
+            cout << "Cannot add more doctors to " << hospitalName << endl;
+        }
+    }
+
+    void display() {
+        cout << "Hospital: " << hospitalName << endl;
+        cout << "Doctors currently working:\n";
+        if (doctorCount == 0) {
+            cout << "No doctors assigned yet.\n";
+        } else {
+            for (int i = 0; i < doctorCount; i++) {
+                doctors[i]->displayDoctor();
+            }
+        }
+        cout << "--------------------------------------" << endl;
+    }
+};
+
+int main() {
+    Doctor doc1("Jitesh", "Cardiologist", 10);
+    Doctor doc2("Alok", "Neurologist", 8);
+    Doctor doc3("Prem", "Orthopedic", 5);
+
+    Hospital hosp1("City Hospital");
+    Hospital hosp2("Green Valley Medical Center");
+
+    hosp1.addDoctor(&doc1);
+    hosp1.addDoctor(&doc2);
+
+    hosp2.addDoctor(&doc2);
+    hosp2.addDoctor(&doc3);
+
+    cout << "=== Hospital Details ===" << endl;
+    hosp1.display();
+    hosp2.display();
+
+    return 0;
+}
