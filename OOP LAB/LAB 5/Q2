@@ -10,7 +10,7 @@ class Student{
 	int numExams;
 	
 	public:
-		Student(int studentID, const char* studentName, int num, const int* examScores ){
+		Student(int studentID, char* studentName, int num, int* examScores ){
 			id = studentID;
 			numExams = num;
 			
@@ -20,11 +20,10 @@ class Student{
 			scores = new int[numExams];
 			for(int i = 0; i<numExams;i++){
 				scores[i] = examScores[i];
-				
 			}
 		}
 		
-		Student(const Student& other){
+		Student(Student& other){
 			id = other.id;
 			numExams = other.numExams;
 			
@@ -34,25 +33,24 @@ class Student{
 			scores = new int[numExams];
 			for(int i = 0; i<numExams;i++){
 				scores[i] = other.scores[i];
+			}
 		}
-	}
-	
-	void display(){
-		cout<<"Student ID: "<< id << endl;
-		cout<<"Name: "<< name << endl;
-		cout<<"Exam scores: ";
-		for(int i = 0; i <  numExams; i++){
-			cout<< scores[i] <<endl;
+		
+		void display(){
+			cout<<"Student ID: "<< id << endl;
+			cout<<"Name: "<< name << endl;
+			cout<<"Exam scores: ";
+			for(int i = 0; i <  numExams; i++){
+				cout<< scores[i] <<endl;
+			}
+			cout<<"-----------------------------------------------------"<< endl;
 		}
-		cout<<"-----------------------------------------------------"<< endl;
-	}
-	
-	~Student(){
-		delete[] name;
-		delete[] scores;
-	}
-	
-	
+		
+		~Student(){
+			delete[] name;
+			delete[] scores;
+		}
+		
 };
 
 int main(){
@@ -68,5 +66,4 @@ int main(){
 	s2.display();
 	
 	return 0;
-	
 }
