@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+
+class Product {
+	public:
+		int productID;
+		string productName;
+		float price;
+
+		Product(int id, string name, float p) {
+			productID = id;
+			productName = name;
+			price = p;
+		}
+
+		virtual void applyDiscount() {}
+
+		virtual float calculateTotalPrice(int quantity) {
+			return price * quantity;
+		}
+
+		virtual void displayProductInfo() {
+			cout << "ID: " << productID << ", Name: " << productName << ", Price: " << price << endl;
+		}
+};
+
+class Electronics : public Product {
+	public:
+		string brand;
+
+		Electronics(int id, string name, float p, string b)
+			: Product(id, name, p) {
+			brand = b;
+		}
+
+		void displayProductInfo() {
+			cout << "Electronics: " << productName << ", Brand: " << brand << ", Price: " << price << endl;
+		}
+};
+
+class Clothing : public Product {
+	public:
+		string size;
+
+		Clothing(int id, string name, float p, string s)
+			: Product(id, name, p) {
+			size = s;
+		}
+
+		void applyDiscount() {
+			price = price * 0.9;
+		}
+};
+
+class FoodItem : public Product {
+	public:
+		FoodItem(int id, string name, float p)
+			: Product(id, name, p) {}
+
+		float calculateTotalPrice(int quantity) {
+			if (quantity >= 10) {
+				return price * quantity * 0.9;
+			}
+			return price * quantity;
+		}
+};
+
+class Book : public Product {
+	public:
+		string author;
+
+		Book(int id, string name, float p, string a)
+			: Product(id, name, p) {
+			author = a;
+		}
+
+		void displayProductInfo() {
+			cout << "Book: " << productName << ", Author: " << author << ", Price: " << price << endl;
+		}
+};
+
+int main() {
+	Electronics e(1, "Laptop", 1200, "Dell");
+	Clothing c(2, "Jeans", 60, "L");
+	FoodItem f(3, "Milk", 2.5);
+	Book b(4, "Data Structures", 45, "John Smith");
+
+	c.applyDiscount();
+
+	e.displayProductInfo();
+	c.displayProductInfo();
+	b.displayProductInfo();
+
+	float total = f.calculateTotalPrice(15);
+	cout << "Total for 15 Milks: " << total << endl;
+
+	return 0;
+}
