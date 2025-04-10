@@ -1,0 +1,117 @@
+#include<iostream>
+using namespace std;
+
+class Ticket{
+	protected:
+		int ticketID;
+		string passengerName;
+		double price;
+		string date;
+		string destination;
+
+	public:
+		void setDetails(int id, string name, double p, string d, string dest){
+			ticketID = id;
+			passengerName = name;
+			price = p;
+			date = d;
+			destination = dest;
+		}
+
+		void displayTicketInfo(){
+			cout<<"Ticket ID: "<<ticketID<<"\nPassenger: "<<passengerName<<endl;
+			cout<<"Price: "<<price<<"\nDate: "<<date<<"\nDestination: "<<destination<<endl;
+		}
+};
+
+class FlightTicket : public Ticket{
+	string airlineName;
+	string flightNumber;
+	string seatClass;
+
+	public:
+		void setFlightDetails(string airline, string flight, string seat){
+			airlineName = airline;
+			flightNumber = flight;
+			seatClass = seat;
+		}
+		void displayTicketInfo(){
+			Ticket::displayTicketInfo();
+			cout<<"Airline: "<<airlineName<<"\nFlight Number: "<<flightNumber<<"\nSeat Class: "<<seatClass<<endl;
+		}
+};
+
+class TrainTicket : public Ticket{
+	int trainNumber;
+	string coachType;
+	string departureTime;
+
+	public:
+		void setTrainDetails(int train, string coach, string time){
+			trainNumber = train;
+			coachType = coach;
+			departureTime = time;
+		}
+		void displayTicketInfo(){
+			Ticket::displayTicketInfo();
+			cout<<"Train Number: "<<trainNumber<<"\nCoach Type: "<<coachType;
+			cout<<"\nDeparture Time: "<<departureTime<<endl;
+		}
+};
+
+class BusTicket : public Ticket{
+	string busCompany;
+	string seatNumber;
+
+	public:
+		void setBusDetails(string company, string seat){
+			busCompany = company;
+			seatNumber = seat;
+		}
+		void displayTicketInfo(){
+			Ticket::displayTicketInfo();
+			cout<<"Bus Company: "<<busCompany<<"\nSeat Number: "<<seatNumber<<endl;
+		}
+};
+
+class ConcertTicket : public Ticket{
+	string artistName;
+	string venue;
+	string seatType;
+
+	public:
+		void setConcertDetails(string artist, string v, string seat){
+			artistName = artist;
+			venue = v;
+			seatType = seat;
+		}
+		void displayTicketInfo(){
+			Ticket::displayTicketInfo();
+			cout<<"Artist: "<<artistName<<"\nVenue: "<<venue<<"\nSeat Type: "<<seatType<<endl;
+		}
+};
+
+int main(){
+	FlightTicket f;
+	f.setDetails(1001, "Zainab", 6500, "12/05/2025", "Karachi");
+	f.setFlightDetails("Emirates", "EK720", "Business");
+	f.displayTicketInfo();
+	cout<<endl;
+
+	TrainTicket t;
+	t.setDetails(2002, "Umer", 2800, "18/05/2025", "Faisalabad");
+	t.setTrainDetails(245, "AC Standard", "09:30 PM");
+	t.displayTicketInfo();
+	cout<<endl;
+
+	BusTicket b;
+	b.setDetails(3003, "Sana", 1800, "22/05/2025", "Sukkur");
+	b.setBusDetails("Daewoo Express", "A12");
+	b.displayTicketInfo();
+	cout<<endl;
+
+	ConcertTicket c;
+	c.setDetails(4004, "Hamza", 3500, "01/06/2025", "Nishtar Park Karachi");
+	c.setConcertDetails("Ali Zafar", "National Stadium", "Gold");
+	c.displayTicketInfo();
+}
