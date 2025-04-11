@@ -1,100 +1,76 @@
-#include<iostream>
+#include <iostream>
+#include <cmath>
 using namespace std;
 
-class Complex{
-	private:
-		float real;
-		float imaginary;
+class Complex {
+private:
+    double real;
+    double imag;
 
-	public:
-		Complex(){
-			real = 0;
-			imaginary = 0;
-		}
+public:
+    Complex(double r = 0.0, double i = 0.0) {
+        real = r;
+        imag = i;
+    }
 
-		Complex(float r, float i){
-			real = r;
-			imaginary = i;
-		}
+    Complex operator+(const Complex& other) {
+        return Complex(real + other.real, imag + other.imag);
+    }
 
-		Complex operator+(Complex c){
-			Complex result;
-			result.real = real + c.real;
-			result.imaginary = imaginary + c.imaginary;
-			return result;
-		}
+    Complex operator-(const Complex& other) {
+        return Complex(real - other.real, imag - other.imag);
+    }
 
-		Complex operator-(Complex c){
-			Complex result;
-			result.real = real - c.real;
-			result.imaginary = imaginary - c.imaginary;
-			return result;
-		}
+    Complex operator*(const Complex& other) {
+        double r = real * other.real - imag * other.imag;
+        double i = real * other.imag + imag * other.real;
+        return Complex(r, i);
+    }
 
-		Complex operator*(Complex c){
-			Complex result;
-			result.real = (real*c.real) - (imaginary*c.imaginary);
-			result.imaginary = (real*c.imaginary) + (imaginary*c.real);
-			return result;
-		}
+    Complex operator/(const Complex& other) {
+        double denominator = other.real * other.real + other.imag * other.imag;
+        double r = (real * other.real + imag * other.imag) / denominator;
+        double i = (imag * other.real - real * other.imag) / denominator;
+        return Complex(r, i);
+    }
 
-		Complex operator/(Complex c){
-			Complex result;
-			float denominator = (c.real*c.real+c.imaginary*c.imaginary);
-			result.real = ((real*c.real) + (imaginary*c.imaginary))/denominator;
-			result.imaginary = ((imaginary*c.real) - (real*c.imaginary))/denominator;
-			return result;
-		}
+    friend double magnitude(const Complex& c);
 
-		friend float magnitude(Complex c);
-
-		friend ostream& operator<<(ostream &out, Complex c);
+    friend ostream& operator<<(ostream& out, const Complex& c);
 };
 
-float mySqrt(float number){
-	float guess = number / 2;
-	float prevGuess;
-
-	do{
-		prevGuess = guess;
-		guess = (guess + number / guess) / 2;
-	} 
-	    while ((prevGuess - guess > 0.0001) || (guess - prevGuess > 0.0001));
-
-	return guess;
+double magnitude(const Complex& c) {
+    return sqrt(c.real * c.real + c.imag * c.imag);
 }
 
-float magnitude(Complex c) {
-	float square = c.real * c.real + c.imaginary * c.imaginary;
-	return mySqrt(square);
+ostream& operator<<(ostream& out, const Complex& c) {
+    out << "(" << c.real;
+    if (c.imag >= 0)
+        out << " + " << c.imag << "i)";
+    else
+        out << " - " << -c.imag << "i)";
+    return out;
 }
 
-ostream& operator<<(ostream &out, Complex c){
-	out << "(" << c.real;
-	if (c.imaginary >= 0)
-		out<< " + "<<c.imaginary << "i)";
-	else
-		out<<" - "<< -c.imaginary << "i)";
-	return out;
-}
+int main() {
+    Complex c1(3, 4);
+    Complex c2(1, -2);
 
-int main(){
-	Complex c1(3, 4);
-	Complex c2(1, 2);
+    cout << "Complex Number 1: " << c1 << endl;
+    cout << "Complex Number 2: " << c2 << endl;
 
-	Complex sum = c1+c2;
-	Complex diff = c1-c2;
-	Complex prod = c1*c2;
-	Complex div = c1/c2;
+    Complex sum = c1 + c2;
+    Complex diff = c1 - c2;
+    Complex prod = c1 * c2;
+    Complex quot = c1 / c2;
 
-	cout<<"First Complex Number: "<<c1<<endl;
-	cout<<"Second Complex Number: "<<c2<<endl;
+    cout << "\nAddition: " << sum;
+    cout << "\nSubtraction: " << diff;
+    cout << "\nMultiplication: " << prod;
+    cout << "\nDivision: " << quot;
 
-	cout<<"Addition: " <<sum<<endl;
-	cout<<"Subtraction: "<<diff<<endl;
-	cout<<"Multiplication: "<<prod<<endl;
-	cout<<"Division: "<<div<<endl;
-	cout<<"Magnitude of First: "<<magnitude(c1)<<endl;
-	cout<<"Magnitude of Second: "<<magnitude(c2)<<endl;
+    cout << "\n\nMagnitude of " << c1 << " = " << magnitude(c1);
+    cout << "\nMagnitude of " << c2 << " = " << magnitude(c2) << endl;
 
+    return 0;
 }
