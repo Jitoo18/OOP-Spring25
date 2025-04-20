@@ -1,0 +1,64 @@
+#include "iostream"
+using namespace std;
+
+class MenuItem
+{
+protected:
+    string dishName;
+    double price;
+
+public:
+    MenuItem(string n, double pr) : dishName(n), price(pr) {};
+
+    virtual void showDetails() = 0;
+    virtual void prepare() = 0;
+
+    virtual ~MenuItem();
+};
+
+class Apetizer : public MenuItem
+{
+public:
+    Apetizer(string n, double pr) : MenuItem(n, pr) {}
+    void showDetails()
+    {
+        cout << "YOUR APETIZER" << endl;
+        cout << "Dish Name: " << dishName << endl
+             << "Price: " << price << endl;
+    }
+    void prepare()
+    {
+        cout << "Preparing Apetizer: " << dishName << endl;
+    }
+};
+
+class MainCourse : public MenuItem
+{
+public:
+    MainCourse(string n, double pr) : MenuItem(n, pr) {}
+
+    void showDetails()
+    {
+        cout << "YOUR MainCourse" << endl;
+        cout << "Dish Name: " << dishName << endl
+             << "Price: " << price << endl;
+    }
+    void prepare()
+    {
+        cout << "Preparing MainCourse: " << dishName << endl;
+    }
+};
+
+int main()
+{
+    MenuItem *m1 = new Apetizer("Sandwich", 200);
+    MenuItem *m2 = new MainCourse("Fish", 1000);
+
+    m1->prepare();
+    m1->showDetails();
+
+    m2->prepare();
+    m2->showDetails();
+
+    return 0;
+}
