@@ -21,7 +21,7 @@ public:
 
     void displayReport() override
     {
-        cout << "Thermometer Reading: " << temperature << "°C" << endl;
+        cout << "Thermometer Reading: " << temperature << "C" << endl;
     }
 };
 
