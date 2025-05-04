@@ -1,0 +1,30 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ofstream fileOut("large_log.txt");
+    fileOut << "This is a simple log file for testing.";
+    fileOut.close();
+
+    ifstream fileIn("large_log.txt");
+    if (!fileIn) {
+        cout << "Could not open the file!" << endl;
+        return 1;
+    }
+
+    char buffer[11];
+
+    fileIn.read(buffer, 10);
+    buffer[10] = '\0';
+    cout << "First 10 characters: " << buffer << endl;
+    cout << "Position after first read: " << fileIn.tellg() << endl;
+
+    fileIn.read(buffer, 10);
+    buffer[10] = '\0';
+    cout << "Next 10 characters: " << buffer << endl;
+    cout << "Position after second read: " << fileIn.tellg() << endl;
+
+    fileIn.close();
+    return 0;
+}
