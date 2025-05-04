@@ -1,0 +1,63 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int main() {
+    ifstream file("vehicles.txt");
+
+    if (!file.is_open()) {
+        cerr << "Error: Could not open the file 'vehicles.txt'.\n";
+        return 1;
+    }
+
+    string line;
+
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        if (line[0] == '#' || (line.size() >= 2 && line[0] == '/' && line[1] == '/')) continue;
+
+
+        istringstream ss(line);
+        string type, id, name, year, extraData, certification;
+
+        
+        getline(ss, type, ',');
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, year, ',');
+        getline(ss, extraData, ',');
+        getline(ss, certification, ',');
+
+        
+        auto trim = [](string &str) {
+            size_t start = str.find_first_not_of(" \t");
+            if (start != string::npos) str = str.substr(start);
+        };
+        trim(type);
+        trim(id);
+        trim(name);
+        trim(year);
+        trim(extraData);
+        trim(certification);
+        
+        //updating code 
+        int yearInt = stoi(year);  // Convert string to int
+
+        // Print the integer year
+        cout << "Year (int): " << yearInt << endl;
+
+        // same code 
+        cout << "Type: " << type << endl;
+        cout << "ID: " << id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Year: " << year << endl;
+        cout << "ExtraData: " << extraData << endl;
+        cout << "Certification: " << certification << endl;
+        cout << "---------------------------\n";
+    }
+
+    file.close();
+    return 0;
+}
