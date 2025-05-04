@@ -1,0 +1,35 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    ifstream file("vehicles.txt"); // Open file for reading
+
+    if (!file.is_open())
+    {
+        cerr << "Error: Could not open the file 'vehicles.txt'.\n";
+        return 1;
+    }
+
+    string line;
+
+    while (getline(file, line))
+    {
+        // Skip empty lines
+        if (line.empty())
+            continue;
+
+        // Skip comment lines starting with '#' or '//'
+        if (line[0] == '#' || (line.size() >= 2 && line[0] == '/' && line[1] == '/'))
+            continue;
+
+        // Print valid lines
+        cout << line << endl;
+    }
+
+    file.close();
+    return 0;
+}
