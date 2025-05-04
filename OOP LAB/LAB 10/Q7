@@ -1,0 +1,31 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ofstream sensorFile("sensor_log.txt");
+
+    if (!sensorFile) {
+        cout << "Error: Could not open the file for writing." << endl;
+        return 1;
+    }
+
+    // First dummy sensor data write
+    sensorFile << "Sensor1: Temperature = 25.6 C\n";
+    streampos pos1 = sensorFile.tellp();
+    cout << "After first write, put pointer is at position: " << pos1 << endl;
+
+    // Second dummy sensor data write
+    sensorFile << "Sensor2: Humidity = 60%\n";
+    streampos pos2 = sensorFile.tellp();
+    cout << "After second write, put pointer is at position: " << pos2 << endl;
+
+    // Third dummy sensor data write
+    sensorFile << "Sensor3: Pressure = 1013 hPa\n";
+    streampos pos3 = sensorFile.tellp();
+    cout << "After third write, put pointer is at position: " << pos3 << endl;
+
+    sensorFile.close();
+
+    return 0;
+}
