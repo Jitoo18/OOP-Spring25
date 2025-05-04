@@ -1,0 +1,81 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int main() {
+    ifstream file("vehicles.txt");
+
+    if (!file.is_open()) {
+        cerr << "Error: Could not open the file 'vehicles.txt'.\n";
+        return 1;
+    }
+
+    string line;
+
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        if (line[0] == '#' || (line.size() >= 2 && line[0] == '/' && line[1] == '/')) continue;
+
+        istringstream ss(line);
+        string type, id, name, year, extraData, certification;
+
+        getline(ss, type, ',');
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, year, ',');
+        getline(ss, extraData, ',');
+        getline(ss, certification, ',');
+
+        auto trim = [](string &str) {
+            size_t start = str.find_first_not_of(" \t");
+            if (start != string::npos) str = str.substr(start);
+        };
+        trim(type);
+        trim(id);
+        trim(name);
+        trim(year);
+        trim(extraData);
+        trim(certification);
+
+        cout << "Type: " << type << endl;
+        cout << "ID: " << id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Year: " << year << endl;
+        cout << "ExtraData: " << extraData << endl;
+        cout << "Certification: " << certification << endl;
+
+
+       // Remove spaces manually from type
+       string typeNoSpaces = "";
+       for (char c : type) {
+           if (c != ' ') {
+               typeNoSpaces += c;
+           }
+       }
+
+       // Extract and convert value from ExtraData
+       size_t colonPos = extraData.find(':');
+       if (colonPos != string::npos) {
+           string valueStr = extraData.substr(colonPos + 1);
+           trim(valueStr);
+
+           if (typeNoSpaces == "AutonomousCar") {
+               float softwareVersion = stof(valueStr);
+               cout << ">> Software Version: " << softwareVersion << "\n";
+           }
+           else if (typeNoSpaces == "ElectricVehicle") {
+               int batteryCapacity = stoi(valueStr);
+               cout << ">> Battery Capacity: " << batteryCapacity << " kWh\n";
+           }
+        } else {
+           cout << ">> No colon found in ExtraData.\n";
+       }
+
+       cout << "---------------------------\n";
+   }
+
+    file.close();
+    return 0;
+}
