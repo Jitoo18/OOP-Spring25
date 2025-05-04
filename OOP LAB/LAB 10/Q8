@@ -1,0 +1,43 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+
+    ofstream outFile("config.txt");
+    if (!outFile) {
+        cout << "Error: Could not create config.txt" << endl;
+        return 1;
+    }
+
+    outFile << "AAAAA" << "BBBBB" << "CCCCC";
+    outFile.close();
+
+    //fstream for both input and output
+    fstream configFile("config.txt", ios::in | ios::out);
+    if (!configFile) {
+        cout << "Error: Could not open config.txt for update" << endl;
+        return 1;
+    }
+
+    //Move put pointer to position 5 start of "BBBBB"
+    configFile.seekp(5);
+    configFile << "XXXXX";  //Overwriting "XXXXX"
+
+    configFile.close();
+
+    //Read back to verify the update
+    ifstream verifyFile("config.txt");
+    if (!verifyFile) {
+        cout << "Error: Could not open config.txt to verify update" << endl;
+        return 1;
+    }
+
+    string content;
+    getline(verifyFile, content);
+    cout << "Updated file content: " << content << endl;
+
+    verifyFile.close();
+
+    return 0;
+}
