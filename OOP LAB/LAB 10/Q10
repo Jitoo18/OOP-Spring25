@@ -1,0 +1,31 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ofstream fileOut("data_records.txt");
+    fileOut << "Record 1\n";
+    fileOut << "Record 2\n";
+    fileOut << "Record 3\n";
+    fileOut << "Record 4\n";
+    fileOut.close();
+
+    ifstream fileIn("data_records.txt");
+    if (!fileIn) {
+        cout << "Error opening the file." << endl;
+        return 1;
+    }
+
+    /* Calculate offset to start of "Record 3"
+    Each record is 9 characters: "Record X\n"
+    So Record 1 + Record 2 = 9 + 9 = 18 bytes*/
+    
+    fileIn.seekg(18, ios::beg); // Move to byte 18 (start of Record 3)
+
+    string record;
+    getline(fileIn, record);
+    cout << "Third record: " << record << endl;
+
+    fileIn.close();
+    return 0;
+}
