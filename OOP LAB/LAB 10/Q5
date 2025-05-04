@@ -1,0 +1,106 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    ifstream file("vehicles.txt");
+
+    if (!file.is_open()) {
+        cerr << "Error: Could not open the file 'vehicles.txt'.\n";
+        return 1;
+    }
+
+    string line;
+
+    while (getline(file, line)) {
+        if (line.empty()) continue;
+        if (line[0] == '#' || (line.size() >= 2 && line[0] == '/' && line[1] == '/')) continue;
+
+        istringstream ss(line);
+        string type, id, name, year, extraData, certification;
+
+        getline(ss, type, ',');
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, year, ',');
+        getline(ss, extraData, ',');
+        getline(ss, certification, ',');
+
+        auto trim = [](string &str) {
+            size_t start = str.find_first_not_of(" \t");
+            if (start != string::npos)
+                str = str.substr(start);
+        };
+        trim(type);
+        trim(id);
+        trim(name);
+        trim(year);
+        trim(extraData);
+        trim(certification);
+
+        int yearInt = stoi(year);
+
+        cout << "Type: " << type << "\n";
+        cout << "ID: " << id << "\n";
+        cout << "Name: " << name << "\n";
+        cout << "Year: " << yearInt << "\n";
+        cout << "ExtraData: " << extraData << "\n";
+        cout << "Certification: " << certification << "\n";
+
+        // Remove spaces manually from type for comparison
+        string typeNoSpaces = "";
+        for (char c : type) {
+            if (c != ' ')
+                typeNoSpaces += c;
+        }
+
+        // Parse ExtraData based on type
+        if (typeNoSpaces == "AutonomousCar") {
+            size_t colonPos = extraData.find(':');
+            if (colonPos != string::npos) {
+                string valueStr = extraData.substr(colonPos + 1);
+                trim(valueStr);
+                float softwareVersion = stof(valueStr);
+                cout << ">> Software Version: " << softwareVersion << "\n";
+            }
+        }
+        else if (typeNoSpaces == "ElectricVehicle") {
+            size_t colonPos = extraData.find(':');
+            if (colonPos != string::npos) {
+                string valueStr = extraData.substr(colonPos + 1);
+                trim(valueStr);
+                int batteryCapacity = stoi(valueStr);
+                cout << ">> Battery Capacity: " << batteryCapacity << " kWh\n";
+            }
+        }
+        else if (typeNoSpaces == "HybridTruck") {
+            size_t cargoColon = extraData.find(':');
+            size_t pipePos = extraData.find('|');
+            size_t batteryColon = extraData.find(':', pipePos); // Find second colon after pipe
+
+            if (cargoColon != string::npos && pipePos != string::npos && batteryColon != string::npos) {
+                string cargoStr = extraData.substr(cargoColon + 1, pipePos - cargoColon - 1);
+                string batteryStr = extraData.substr(batteryColon + 1);
+                trim(cargoStr);
+                trim(batteryStr);
+                int cargo = stoi(cargoStr);
+                int battery = stoi(batteryStr);
+                cout << ">> Cargo Capacity: " << cargo << " kg\n";
+                cout << ">> Battery Capacity: " << battery << " kWh\n";
+            } else {
+                cout << ">> Error parsing HybridTruck extra data.\n";
+            }
+        }
+        else {
+            cout << ">> Unknown vehicle type: " << type << "\n";
+        }
+
+        cout << "---------------------------\n";
+    }
+
+    file.close();
+    return 0;
+}
