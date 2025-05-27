@@ -1,0 +1,155 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+unsigned long hashPassword(const string &password) {
+	unsigned long hash = 5381;
+	for (char c : password) {
+		hash = (hash * 33) + c;
+	}
+	return hash;
+}
+
+class User {
+	protected:
+		string name, email;
+		int id;
+		unsigned long hashed_password;
+		string permissions;
+
+	public:
+		User(string n, int i, string e, string pass, string perms) : name(n), id(i), email(e), permissions(perms) {
+			hashed_password = hashPassword(pass);
+		}
+
+		bool authenticate(string pass) {
+			return hashPassword(pass) == hashed_password;
+		}
+
+		virtual void display() {
+			cout << "User: " << name << " (ID: " << id << ", Email: " << email << ")" << endl << "Permissions: " << permissions << endl;
+		}
+
+		virtual void accessLab() {
+			cout << name << " has lab access based on role: " << permissions << endl;
+		}
+};
+
+class Student : public User {
+	protected:
+		int assignments[5] = {0, 0, 0, 0, 0};
+
+	public:
+		Student(string n, int i, string e, string pass) : User(n, i, e, pass, "Submit Assignment") {}
+
+		void submitAssignment(int index) {
+			if (index >= 0 && index < 5) {
+				assignments[index] = 1;
+				cout << name << " submitted assignment " << index + 1 << endl;
+			} else {
+				cout << "Invalid assignment index!" << endl;
+			}
+		}
+
+		void display() override {
+			User::display();
+			cout << "Assignments: ";
+			for (int i = 0; i < 5; i++) {
+				cout << (assignments[i] ? "[Submitted] " : "[Pending] ");
+			}
+			cout << endl;
+		}
+};
+
+class TA : public Student {
+		string studentList[10];
+		int studentCount = 0;
+		string projects[2];
+		int projectCount = 0;
+
+	public:
+		TA(string n, int i, string e, string pass) : Student(n, i, e, pass) {
+			permissions = "View Projects, Manage Students";
+		}
+
+		void assignStudent(string studentName) {
+			if (studentCount < 10) {
+				studentList[studentCount++] = studentName;
+				cout << studentName << " assigned to TA " << name << endl;
+			} else {
+				cout << "Cannot assign more than 10 students." << endl;
+			}
+		}
+
+		void startProject(string projectName) {
+			if (projectCount < 2) {
+				projects[projectCount++] = projectName;
+				cout << name << " started working on project: " << projectName << endl;
+			} else {
+				cout << "Cannot handle more than 2 projects." << endl;
+			}
+		}
+
+		void display() override {
+			Student::display();
+			cout << "Managing Students: ";
+			for (int i = 0; i < studentCount; i++) cout << studentList[i] << ", ";
+			cout << endl << "Projects: ";
+			for (int i = 0; i < projectCount; i++) cout << projects[i] << ", ";
+			cout << endl;
+		}
+};
+
+class Professor : public User {
+	public:
+		Professor(string n, int i, string e, string pass) : User(n, i, e, pass, "Assign Projects, Full Lab Access") {}
+
+		void assignProject(TA &ta, string projectName) {
+			ta.startProject(projectName);
+		}
+
+		void display() override {
+			User::display();
+			cout << "Role: Professor" << endl;
+		}
+};
+
+void authenticateAndPerformAction(User *user, string action, string password) {
+	if (user->authenticate(password)) {
+		cout << "Authentication Successful!" << endl;
+		user->accessLab();
+	} else {
+		cout << "Authentication Failed!" << endl;
+	}
+}
+
+int main() {
+
+	cout << "JITESH KUMAR (24K0871)" << endl;
+	cout << "----------------------------------------------------------" << endl << endl;
+
+	Student s1("Jitesh", 0101, "jitesh@nu.edu.pk", "pass123");
+	TA t1("Sara", 0201, "sara@nu.edu.pk", "ta123");
+	Professor p1("Dr. Khan", 0301, "khan@nu.edu.pk", "prof123");
+	cout << endl; 
+
+	s1.display();
+	s1.submitAssignment(2);
+	s1.display();
+	cout << endl; 
+
+	t1.assignStudent("Zaid");
+	t1.assignStudent("Harsh");
+	t1.startProject("AI Research");
+	t1.display();
+	cout << endl; 
+
+	p1.assignProject(t1, "Machine Learning");
+	t1.display();
+	cout << endl; 
+
+	authenticateAndPerformAction(&p1, "Access Lab", "prof123");
+	authenticateAndPerformAction(&t1, "Access Lab", "wrongpass");
+
+	return 0;
+}
