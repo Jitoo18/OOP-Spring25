@@ -1,0 +1,142 @@
+#include <iostream>
+#include <cstdlib> // for random number generating
+#include <ctime>  // for current time and used to seed randomness.
+using namespace std;
+
+class Ball
+{
+private:
+    int x, y;
+
+public:
+    Ball() : x(0), y(0) {}
+    void move(int dx, int dy)
+    {
+        x += dx;
+        y += dy;
+    }
+    int getX() { return x; }
+    int getY() { return y; }
+    void reset()
+    {
+        x = 0;
+        y = 0;
+    }
+};
+
+class Goal
+{
+public:
+    const int goalX = 3;
+    const int goalY = 3;
+    bool isGoalReached(int ballX, int ballY)
+    {
+        return ballX == goalX && ballY == goalY;
+    }
+};
+
+class Robot
+{
+public:
+    string name;
+    int hits;
+    Robot(string n) : name(n), hits(0) {}
+
+    void resetHits() { hits = 0; }
+
+    void hitBall(Ball &ball)
+    {
+        int moveX = 0, moveY = 0;
+
+        int moveChoice = rand() % 3;
+
+        if (moveChoice == 0 && ball.getX() < 3)
+            moveX = 1;
+        else if (moveChoice == 1 && ball.getY() < 3)
+            moveY = 1;
+        else if (moveChoice == 2 && ball.getX() < 3 && ball.getY() < 3)
+        {
+            moveX = 1;
+            moveY = 1;
+        }
+        else if (ball.getX() < 3)
+            moveX = 1;
+        else if (ball.getY() < 3)
+            moveY = 1;
+
+        ball.move(moveX, moveY);
+        hits++;
+    }
+};
+
+class Team
+{
+public:
+    string teamName;
+    Robot *robot;
+    Team(string name, Robot *r) : teamName(name), robot(r) {}
+};
+
+class Game
+{
+private:
+    Team *teamOne;
+    Team *teamTwo;
+    Ball ball;
+    Goal goal;
+
+public:
+    Game(Team *t1, Team *t2) : teamOne(t1), teamTwo(t2) {}
+
+    void play(Team *team)
+    {
+        cout << "\nTeam " << team->teamName << " is playing..." << endl;
+
+        team->robot->resetHits();
+
+        while (!goal.isGoalReached(ball.getX(), ball.getY()))
+        {
+            team->robot->hitBall(ball);
+            cout << "Ball position: (" << ball.getX() << ", " << ball.getY() << ")" << endl;
+        }
+
+        cout << team->robot->name << " reached the goal in " << team->robot->hits << " hits!" << endl;
+    }
+
+    void startGame()
+    {
+        srand(time(0));
+
+        play(teamOne);
+
+        ball.reset();
+
+        play(teamTwo);
+        declareWinner();
+    }
+
+    void declareWinner()
+    {
+        cout << "\nGame Over!" << endl;
+        if (teamOne->robot->hits < teamTwo->robot->hits)
+            cout << "Winner: " << teamOne->teamName << "!" << endl;
+        else if (teamOne->robot->hits > teamTwo->robot->hits)
+            cout << "Winner: " << teamTwo->teamName << "!" << endl;
+        else
+            cout << "It's a tie!" << endl;
+    }
+};
+
+int main()
+{
+	
+	cout<<"JITESH KUMAR (24K0871)"<<endl;
+	cout<<"-----------------------------------------------------------------------------------------------------------------"<<endl<<endl;
+	
+	
+    Robot r1("Alpha"), r2("Beta");
+    Team t1("Red Dragons", &r1), t2("Blue Warriors", &r2);
+    Game footballGame(&t1, &t2);
+    footballGame.startGame();
+    return 0;
+}
