@@ -1,0 +1,174 @@
+#include <iostream>
+using namespace std;
+
+class Skill
+{
+public:
+    int skillID;
+    string skillName;
+    string description;
+
+    Skill(int id, string name, string desc) : skillID(id), skillName(name), description(desc) {}
+
+    void showSkillDetails()
+    {
+        cout << "Skill ID: " << skillID << ", Name: " << skillName << ", Description: " << description << endl;
+    }
+
+    void updateSkillDescription(string newDescription)
+    {
+        description = newDescription;
+    }
+};
+
+class Sport
+{
+public:
+    int sportID;
+    string name;
+    string description;
+    Skill *requiredSkills[10];
+    int skillCount;
+
+    Sport(int id, string n, string desc) : sportID(id), name(n), description(desc), skillCount(0) {}
+
+    void addSkill(Skill *s)
+    {
+        if (skillCount < 10)
+        {
+            requiredSkills[skillCount++] = s;
+        }
+    }
+};
+
+class Student;
+
+class Mentor
+{
+public:
+    int mentorID;
+    string name;
+    Sport *sportsExpertise[10];
+    int maxLearners;
+    Student *assignedLearners[10];
+    int learnerCount;
+
+    Mentor(int id, string n, int maxL) : mentorID(id), name(n), maxLearners(maxL), learnerCount(0) {}
+
+    void assignLearner(Student *s);
+    void removeLearner(Student *s);
+    void viewLearners();
+    void provideGuidance();
+};
+
+class Student
+{
+public:
+    int studentID;
+    string name;
+    int age;
+    Sport *sportsInterests[10];
+    int interestCount;
+    Mentor *mentorAssigned;
+
+    Student(int id, string n, int a) : studentID(id), name(n), age(a), interestCount(0), mentorAssigned(nullptr) {}
+
+    void registerForMentorship(Mentor *m)
+    {
+        if (m->learnerCount < m->maxLearners)
+        {
+            mentorAssigned = m;
+            m->assignLearner(this);
+            cout << name << " has been assigned to mentor " << m->name << endl;
+        }
+        else
+        {
+            cout << "Mentor " << m->name << " has no available slots." << endl;
+        }
+    }
+
+    void viewMentorDetails()
+    {
+        if (mentorAssigned)
+        {
+            cout << "Mentor: " << mentorAssigned->name << endl;
+        }
+        else
+        {
+            cout << "No mentor assigned." << endl;
+        }
+    }
+
+    void updateSportsInterest(Sport *s)
+    {
+        if (interestCount < 10)
+        {
+            sportsInterests[interestCount++] = s;
+        }
+    }
+};
+
+void Mentor::assignLearner(Student *s)
+{
+    if (learnerCount < maxLearners)
+    {
+        assignedLearners[learnerCount++] = s;
+    }
+}
+
+void Mentor::removeLearner(Student *s)
+{
+    for (int i = 0; i < learnerCount; i++)
+    {
+        if (assignedLearners[i] == s)
+        {
+            for (int j = i; j < learnerCount - 1; j++)
+            {
+                assignedLearners[j] = assignedLearners[j + 1];
+            }
+            learnerCount--;
+            cout << "Student " << s->name << " removed from mentorship under " << name << endl;
+            break;
+        }
+    }
+}
+
+void Mentor::viewLearners()
+{
+    cout << "Mentor " << name << " has the following students:" << endl;
+    for (int i = 0; i < learnerCount; i++)
+    {
+        cout << "- " << assignedLearners[i]->name << endl;
+    }
+}
+
+void Mentor::provideGuidance()
+{
+    cout << "Mentor " << name << " is providing guidance to students." << endl;
+}
+
+int main()
+{
+	
+	cout<<"JITESH KUMAR (24K0871)"<<endl;
+	cout<<"-----------------------------------------------------------------------------------------------------------------"<<endl<<endl;
+	
+    Sport tennis(1, "Tennis", "A racket sport played on a court.");
+    Skill forehand(101, "Forehand", "Basic tennis stroke.");
+    tennis.addSkill(&forehand);
+
+    Mentor ali(1, "Ali", 3);
+    ali.sportsExpertise[0] = &tennis;
+
+    Student saad(101, "Saad", 20);
+    saad.updateSportsInterest(&tennis);
+    saad.registerForMentorship(&ali);
+    ali.viewLearners();
+    ali.provideGuidance();
+
+    saad.viewMentorDetails();
+    ali.removeLearner(&saad);
+    ali.viewLearners();
+
+    return 0;
+}
