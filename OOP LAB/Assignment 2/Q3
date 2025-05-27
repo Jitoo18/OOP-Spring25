@@ -1,0 +1,92 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Vehicle {
+	protected:
+		string vehicleID;
+		int speed;
+		int efficiency;
+
+	public:
+		Vehicle(string id, int s, int e) : vehicleID(id), speed(s), efficiency(e) {}
+		virtual void deliver(string packageType) = 0; 
+		int getSpeed() const {
+			return speed;
+		}
+		int getEfficiency() const {
+			return efficiency;
+		}
+		string getVehicleID() const {
+			return vehicleID;
+		}
+		virtual ~Vehicle() {}
+
+		bool operator>(const Vehicle &other) const {
+			return efficiency > other.efficiency;
+		}
+
+		friend void resolveConflict(Vehicle &v1, Vehicle &v2);
+};
+
+class RamzanTimeShip : public Vehicle {
+	public:
+		RamzanTimeShip(string id, int s, int e) : Vehicle(id, s, e) {}
+		void deliver(string packageType) override {
+			cout << vehicleID << " is delivering " << packageType << " through time-travel!" << endl;
+		}
+};
+
+class RamzanDrone : public Vehicle {
+	public:
+		RamzanDrone(string id, int s, int e) : Vehicle(id, s, e) {}
+		void deliver(string packageType) override {
+			cout << vehicleID << " is delivering " << packageType << " via high-speed aerial transport!" << endl;
+		}
+};
+
+class RamzanHyperPod : public Vehicle {
+	public:
+		RamzanHyperPod(string id, int s, int e) : Vehicle(id, s, e) {}
+		void deliver(string packageType) override {
+			cout << vehicleID << " is delivering " << packageType << " via high-speed ground transport!" << endl;
+		}
+};
+
+class AIAssistant {
+	public:
+		static void evaluatePriority(int urgency, int weight, string destination) {
+			cout << "Evaluating priority: Urgency = " << urgency << ", Weight = " << weight << ", Destination = " << destination << endl;
+		}
+};
+
+void resolveConflict(Vehicle &v1, Vehicle &v2) {
+	if (v1 > v2) {
+		cout << "Conflict resolved: " << v1.vehicleID << " is chosen for delivery due to higher efficiency." << endl;
+	} else {
+		cout << "Conflict resolved: " << v2.vehicleID << " is chosen for delivery due to higher efficiency." << endl;
+	}
+}
+
+int main() {
+	cout << "JITESH KUMAR (24K0871)" << endl;
+	cout << "----------------------------------------------------------" << endl << endl;
+	
+	RamzanTimeShip ship("TimeShip-01", 120, 85);
+	RamzanDrone drone("Drone-01", 150, 90);
+	RamzanHyperPod pod("HyperPod-01", 100, 80);
+	cout << endl;
+	
+	ship.deliver("Sehri package");
+	drone.deliver("Iftar meal");
+	pod.deliver("Bulk supplies");
+	cout << endl;
+	
+	AIAssistant::evaluatePriority(5, 10, "Downtown Area");
+	cout << endl;
+	
+	resolveConflict(drone, pod);
+	resolveConflict(ship, drone);
+
+	return 0;
+}
