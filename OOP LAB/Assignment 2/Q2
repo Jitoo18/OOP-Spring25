@@ -1,0 +1,179 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+class Ghost {
+	protected:
+		string workerName;
+		int scareLevel;
+
+	public:
+		Ghost(string name) : workerName(name) {
+			scareLevel = (rand() % 10) + 1;
+		}
+
+		virtual void haunt() const = 0;
+
+		int getScareLevel() const {
+			return scareLevel;
+		}
+
+		string getWorkerName() const {
+			return workerName;
+		}
+
+		friend ostream &operator<<(ostream &out, const Ghost &g) {
+			out << g.workerName << " (Scare Level: " << g.scareLevel << ")";
+			return out;
+		}
+
+		virtual Ghost* operator+(const Ghost &other) const = 0;
+
+		virtual ~Ghost() {}
+};
+
+class Poltergeist : public Ghost {
+	public:
+		Poltergeist(string name) : Ghost(name) {}
+
+		void haunt() const override {
+			cout << workerName << " (Poltergeist) moves objects mysteriously!" << endl;
+		}
+
+		Ghost* operator+(const Ghost &other) const override {
+			return new Poltergeist(workerName + " & " + other.getWorkerName());
+		}
+};
+
+class Banshee : public Ghost {
+	public:
+		Banshee(string name) : Ghost(name) {}
+
+		void haunt() const override {
+			cout << workerName << " (Banshee) lets out a terrifying scream!" << endl;
+		}
+
+		Ghost* operator+(const Ghost &other) const override {
+			return new Banshee(workerName + " & " + other.getWorkerName());
+		}
+};
+
+class ShadowGhost : public Ghost {
+	public:
+		ShadowGhost(string name) : Ghost(name) {}
+
+		void haunt() const override {
+			cout << workerName << " (ShadowGhost) whispers chilling words in the dark..." << endl;
+		}
+
+		Ghost* operator+(const Ghost &other) const override {
+			return new ShadowGhost(workerName + " & " + other.getWorkerName());
+		}
+};
+
+class ShadowPoltergeist : public Ghost {
+	public:
+		ShadowPoltergeist(string name) : Ghost(name) {}
+
+		void haunt() const override {
+			cout << workerName << " (ShadowPoltergeist) does eerie whispers and moves objects!" << endl;
+		}
+
+		Ghost* operator+(const Ghost &other) const override {
+			return new ShadowPoltergeist(workerName + " & " + other.getWorkerName());
+		}
+};
+
+
+class Visitor {
+	public:
+		string name;
+		int bravery;
+
+		Visitor(string n, int b) : name(n), bravery(b) {}
+
+		void reactToScare(int scareLevel) const {
+			if (scareLevel <= bravery - 2)
+				cout << name << " laughs at the ghost!" << endl;
+			else if (scareLevel >= bravery + 2)
+				cout << name << " screams and runs away!" << endl;
+			else
+				cout << name << " shivers with a shaky voice..." << endl;
+		}
+};
+
+
+class HauntedHouse {
+	private:
+		string name;
+		Ghost *ghosts[5];
+		int ghostCount;
+
+	public:
+		HauntedHouse(string n) : name(n), ghostCount(0) {}
+
+		void addGhost(Ghost *g) {
+			if (ghostCount < 5) {
+				ghosts[ghostCount++] = g;
+			} else {
+				cout << "Cannot add more ghosts!" << endl;
+			}
+		}
+
+		void simulateHaunt() const {
+			cout << "Haunted House: " << name << " is scaring visitors!" << endl;
+			for (int i = 0; i < ghostCount; i++)
+				ghosts[i]->haunt();
+		}
+
+		friend void visit(Visitor visitors[], int numVisitors, const HauntedHouse &house);
+
+		~HauntedHouse() {
+			for (int i = 0; i < ghostCount; i++) {
+				delete ghosts[i];
+			}
+		}
+};
+
+void visit(Visitor visitors[], int numVisitors, const HauntedHouse &house) {
+	cout << "\nVisitors are entering " << house.name << "...\n";
+	house.simulateHaunt();
+	for (int i = 0; i < numVisitors; i++) {
+		int scare = rand() % 10 + 1;
+		visitors[i].reactToScare(scare);
+	}
+	cout << "Visit to " << house.name << " is over.\n\n";
+}
+
+int main() {
+	cout << "JITESH KUMAR (24K0871)" << endl;
+	cout << "----------------------------------------------------------" << endl << endl;
+
+	srand(time(0));
+
+	HauntedHouse house1("Shadow Manor");
+	HauntedHouse house2("Banshee's Lair");
+
+
+	house1.addGhost(new Poltergeist("Jack the Mover"));
+	house1.addGhost(new ShadowGhost("Creepy Carl"));
+	house1.addGhost(new Banshee("Screaming Sarah"));
+
+	house2.addGhost(new Banshee("Echoing Emily"));
+	house2.addGhost(new ShadowPoltergeist("Haunting Harry"));
+
+
+	Visitor visitors[] = {
+		Visitor("Jitesh", 2),
+		Visitor("Harsh", 6),
+		Visitor("Sahil", 8)
+	};
+
+
+	visit(visitors, 3, house1);
+	visit(visitors, 3, house2);
+
+	return 0;
+}
