@@ -1,0 +1,145 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+	protected:
+		string name, email;
+		bool feePaid;
+
+	public:
+		Person(string n, string e) : name(n), email(e), feePaid(false) {}
+
+		virtual void registerForTransport() = 0;
+		virtual void checkFeeStatus() = 0;
+
+		virtual void registerForTransport(string pickupPoint) {
+			cout << name << " registered with pickup point at " << pickupPoint << "." << endl;
+		}
+
+		virtual ~Person() {}
+};
+
+class Student : public Person {
+	private:
+		string studentID;
+
+	public:
+		Student(string id, string n, string e) : Person(n, e), studentID(id) {}
+
+		void registerForTransport() override {
+			cout << "Student " << name << " registered for transport service." << endl;
+		}
+
+		void registerForTransport(string pickupPoint) override {
+			cout << "Student " << name << " registered at " << pickupPoint << "." << endl;
+		}
+
+		void checkFeeStatus() override {
+			char paid;
+			cout << "Have you paid your semester transportation fee? (y/n): ";
+			cin >> paid;
+			feePaid = (paid == 'y' || paid == 'Y');
+			cout << "Fee status: " << (feePaid ? "Paid" : "Not Paid") << endl;
+		}
+};
+
+class Teacher : public Person {
+	private:
+		string employeeID;
+
+	public:
+		Teacher(string id, string n, string e) : Person(n, e), employeeID(id) {}
+
+		void registerForTransport() override {
+			cout << "Teacher " << name << " registered for transport service." << endl;
+		}
+
+		void registerForTransport(string pickupPoint) override {
+			cout << "Teacher " << name << " registered at " << pickupPoint << "." << endl;
+		}
+
+		void checkFeeStatus() override {
+			char paid;
+			cout << "Have you paid your monthly transportation fee? (y/n): ";
+			cin >> paid;
+			feePaid = (paid == 'y' || paid == 'Y');
+			cout << "Fee status: " << (feePaid ? "Paid" : "Not Paid") << endl;
+		}
+};
+
+class Staff : public Person {
+	private:
+		string staffID;
+
+	public:
+		Staff(string id, string n, string e) : Person(n, e), staffID(id) {}
+
+		void registerForTransport() override {
+			cout << "Staff " << name << " registered for transport service." << endl;
+		}
+
+		void registerForTransport(string pickupPoint) override {
+			cout << "Staff " << name << " registered at " << pickupPoint << "." << endl;
+		}
+
+		void checkFeeStatus() override {
+			char paid;
+			cout << "Have you paid your monthly transportation fee? (y/n): ";
+			cin >> paid;
+			feePaid = (paid == 'y' || paid == 'Y');
+			cout << "Fee status: " << (feePaid ? "Paid" : "Not Paid") << endl;
+		}
+};
+
+class Route {
+	public:
+		string routeID, destination;
+
+		Route(string rID, string dest) : routeID(rID), destination(dest) {}
+
+		bool operator==(const Route &other) const {
+			return (routeID == other.routeID && destination == other.destination);
+		}
+};
+
+class Bus {
+	public:
+		string busID;
+		Route route;
+
+		Bus(string id, string rID, string dest) : busID(id), route(rID, dest) {}
+
+		void displayInfo() {
+			cout << "Bus ID: " << busID << " | Route: " << route.destination << endl;
+		}
+};
+
+int main() {
+	cout << "JITESH KUMAR (24K0871)" << endl;
+	cout << "----------------------------------------------------------" << endl << endl;
+
+	Student student1("S123", "Jitesh", "jitesh@nu.edu.pk");
+	Teacher teacher1("T456", "Abdul Basit", "abdulbasit@nu.edu.pk");
+	Staff staff1("ST789", "Hassan", "hassan@nu.edu.pk");
+
+	student1.registerForTransport("Hostel Gate");
+	student1.checkFeeStatus();
+
+	teacher1.registerForTransport("Gate #2");
+	teacher1.checkFeeStatus();
+
+	staff1.registerForTransport("Main Stop");
+	staff1.checkFeeStatus();
+
+	Route route1("R1", "Quaidabad");
+	Route route2("R2", "Defence");
+
+	if (route1 == route2)
+		cout << "Both routes are the same." << endl;
+	else
+		cout << "Routes are different." << endl;
+
+	return 0;
+}
