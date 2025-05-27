@@ -1,0 +1,116 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Student
+{
+public:
+    string studentID;
+    string name;
+    string email;
+    bool feePaid;
+    bool isOnBus;
+
+    void setDetails(string id, string n, string e)
+    {
+        studentID = id;
+        name = n;
+        email = e;
+    }
+
+    void registerForTransport()
+    {
+        cout << "Student " << name << " registered for transport service in Karachi." << endl;
+    }
+
+    void checkFeeStatus()
+    {
+        char paid;
+        cout << "Have you paid your transportation fee? (y/n): ";
+        cin >> paid;
+        if (paid == 'y' || paid == 'Y')
+        {
+            feePaid = true;
+            cout << "Fee status: Paid" << endl;
+        }
+        else
+        {
+            feePaid = false;
+            cout << "Fee status: Not paid" << endl;
+        }
+    }
+};
+
+class Bus
+{
+public:
+    string busID;
+    string routeID;
+    string destination;
+
+    Bus(string id, string rID, string dest) : busID(id), routeID(rID), destination(dest) {}
+
+    void displayInfo()
+    {
+        cout << "Bus ID: " << busID << " Route ID: " << routeID << " Going to: " << destination << "." << endl;
+    }
+
+    void markAttendance(Student &student)
+    {
+        student.isOnBus = true;
+        cout << "Attendance marked for " << student.name << endl;
+    }
+};
+
+int main()
+{
+	cout<<"JITESH KUMAR (24K0871)"<<endl;
+	cout<<"-----------------------------------------------------------------------------------------------------------------"<<endl<<endl;
+	
+	
+    Bus buses[] = {
+        Bus("B1", "R1", "Quaidabad"),
+        Bus("B2", "R2", "Defence"),
+        Bus("B3", "R3", "Teen Talwar"),
+        Bus("B4", "R4", "Clifton")};
+    int numBuses = 4;
+
+    Student student1;
+    string id, name, email;
+
+    cout << "Enter student ID: "<<endl;
+    cin >> id;
+    cout << "Enter student name: "<<endl;
+    cin >> name;
+    cout << "Enter student email: "<<endl;
+    cin >> email;
+    student1.setDetails(id, name, email);
+    student1.registerForTransport();
+    student1.checkFeeStatus();
+
+    if (!student1.feePaid)
+    {
+        cout << "Please pay your fee to activate transportation service." << endl;
+        return 0;
+    }
+
+    string destination;
+    cout << "Where do you need to go? (Quaidabad, Defence, Teen Talwar, Clifton): ";
+    cin >> destination;
+
+    bool found = false;
+    for (int i = 0; i < numBuses; i++)
+    {
+        if (buses[i].destination == destination)
+        {
+            cout << "Assigning you to the bus: ";
+            buses[i].displayInfo();
+            buses[i].markAttendance(student1);
+            found = true;
+            break;
+        }
+    }
+
+    return 0;
+}
